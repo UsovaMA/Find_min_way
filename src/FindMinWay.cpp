@@ -1,75 +1,77 @@
 #include "FindMinWay.h"
 #include <queue>
 #include <iostream>
+#include <limits>
+float inf = std::numeric_limits<float>::infinity();
 
 float find_min_way(float** matrix, int n, int m) {  // обход в ширину
   if ((n == 0) || (m == 0)) {
-    throw 1;  // исключение для неверно заданной матрицы
+    throw logic_error("Error description\n"); 
   }
 
   float** field = new float*[n];
   for (int i = 0; i < n; ++i) {
     field[i] = new float[m];
     for (int j = 0; j < m; ++j)
-      field[i][j] = INFINITY;
+      field[i][j] = inf;
   }
 
   float len = 0;
   std::queue<coordinates> Q;
 
   coordinates Y;  // наша начальная точка
-  Y.string = 0;
-  Y.column = m - 1;
+  Y.x = 0;
+  Y.y = m - 1;
   Q.push(Y);
-  field[Y.string][Y.column] = 0;
+  field[Y.x][Y.y] = 0;
 
   while (!Q.empty()) {
     coordinates point = Q.front();
     Q.pop();
-    if (point.string > 0) {
-      if ((matrix[point.string - 1][point.column] == 1)
-        && (field[point.string - 1][point.column] == INFINITY)) {
+    if (point.x > 0) {
+      if ((matrix[point.x - 1][point.y] == 1)
+        && (field[point.x - 1][point.y] == inf)) {
         coordinates* tmp = new coordinates;
-        tmp->string = (point.string - 1);
-        tmp->column = (point.column);
+        tmp->x = (point.x - 1);
+        tmp->y = (point.y);
         Q.push(*tmp);
-        field[point.string - 1][point.column] = field[point.string][point.column] + 1;
+        field[point.x - 1][point.y] = field[point.x][point.y] + 1;
       }
     }
-    if (point.string < (n - 1)) {
-      if ((matrix[point.string + 1][point.column] == 1)
-        && (field[point.string + 1][point.column] == INFINITY)) {
+    if (point.x < (n - 1)) {
+      if ((matrix[point.x + 1][point.y] == 1)
+        && (field[point.x + 1][point.y] == inf)) {
         coordinates* tmp = new coordinates;
-        tmp->string = (point.string + 1);
-        tmp->column = (point.column);
+        tmp->x = (point.x + 1);
+        tmp->y = (point.y);
         Q.push(*tmp);
-        field[point.string + 1][point.column] = field[point.string][point.column] + 1;
+        field[point.x + 1][point.y] = field[point.x][point.y] + 1;
       }
     }
-    if (point.column > 0) {
-      if ((matrix[point.string][point.column - 1] == 1)
-        && (field[point.string][point.column - 1] == INFINITY)) {
+    if (point.y > 0) {
+      if ((matrix[point.x][point.y - 1] == 1)
+        && (field[point.x][point.y - 1] == inf)) {
         coordinates* tmp = new coordinates;
-        tmp->string = (point.string);
-        tmp->column = (point.column - 1);
+        tmp->x = (point.x);
+        tmp->y = (point.y - 1);
         Q.push(*tmp);
-        field[point.string][point.column - 1] = field[point.string][point.column] + 1;
+        field[point.x][point.y - 1] = field[point.x][point.y] + 1;
       }
     }
-    if (point.column < m - 1) {
-      if ((matrix[point.string][point.column + 1] == 1)
-        && (field[point.string][point.column + 1] == INFINITY)) {
+    if (point.y < m - 1) {
+      if ((matrix[point.x][point.y + 1] == 1)
+        && (field[point.x][point.y + 1] == inf)) {
         coordinates* tmp = new coordinates;
-        tmp->string = (point.string);
-        tmp->column = (point.column + 1);
+        tmp->x = (point.x);
+        tmp->y = (point.y + 1);
         Q.push(*tmp);
-        field[point.string][point.column + 1] = field[point.string][point.column] + 1;
+        field[point.x][point.y + 1] = field[point.x][point.y] + 1;
       }
     }
   }
   len = field[n - 1][0];
   if ((len == 0) || (len == INFINITY)) {
-    throw 2;  // исключение в случае, если пути между точками нет
+	  throw logic_error("Error description\n");  // исключение в случае, если пути между точками нет
   }
   return len;
 }

@@ -52,6 +52,7 @@ TEST(FindMinWay, throw_then_empty_field) {
   float** field = NULL;
   float res = 0;
   EXPECT_ANY_THROW(res = find_min_way(field, n, m));
+
 }
 
 TEST(FindMinWay, throw_then_no_way_in_string) {
